@@ -4,6 +4,7 @@
 			<div v-if="props.type === 'expand'" class="cursor-pointer">
 				<icon :icon="props.expanded ? 'mdi:chevron-down' : 'mdi:chevron-right'" class="mx-auto text-lg" />
 			</div>
+			<div v-else-if="props.sanitize">{{ displayValue }}</div>
 			<div v-else v-html="displayValue"></div>
 		</slot>
 	</td>
@@ -84,15 +85,6 @@ const onColumnClick = () => {
 	if (props.onClick) props.onClick(props.row);
 };
 
-function escapeHTML(str: string) {
-	return str
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#039;");
-}
-
 const displayValue = computed(() => {
 	const value = getObjectValue(props.row, props.display || props.field);
 	const type = props.type || "text";
@@ -102,11 +94,8 @@ const displayValue = computed(() => {
 	else if (type === "onlyYes") rawValue = formatBoolean(value, "");
 	else rawValue = value || "";
 	if (props.sanitize) {
-		const val = DOMPurify.sanitize(rawValue);
-		return escapeHTML(val);
+		return DOMPurify.sanitize(rawValue);
 	}
 	return rawValue;
 });
-
-
 </script>
