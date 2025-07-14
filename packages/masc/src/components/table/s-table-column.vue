@@ -4,6 +4,7 @@
 			<div v-if="props.type === 'expand'" class="cursor-pointer">
 				<icon :icon="props.expanded ? 'mdi:chevron-down' : 'mdi:chevron-right'" class="mx-auto text-lg" />
 			</div>
+			<div v-else-if="props.sanitize">{{ displayValue }}</div>
 			<div v-else v-html="displayValue"></div>
 		</slot>
 	</td>
