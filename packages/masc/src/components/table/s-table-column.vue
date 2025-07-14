@@ -84,6 +84,15 @@ const onColumnClick = () => {
 	if (props.onClick) props.onClick(props.row);
 };
 
+function escapeHTML(str: string) {
+	return str
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
 const displayValue = computed(() => {
 	const value = getObjectValue(props.row, props.display || props.field);
 	const type = props.type || "text";
@@ -93,8 +102,11 @@ const displayValue = computed(() => {
 	else if (type === "onlyYes") rawValue = formatBoolean(value, "");
 	else rawValue = value || "";
 	if (props.sanitize) {
-		return DOMPurify.sanitize(rawValue);
+		const val = DOMPurify.sanitize(rawValue);
+		return escapeHTML(val);
 	}
 	return rawValue;
 });
+
+
 </script>
