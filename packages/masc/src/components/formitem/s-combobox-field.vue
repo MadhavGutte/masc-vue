@@ -100,6 +100,7 @@ const props = defineProps({
 	},
 });
 
+const emits = defineEmits(["update:modelValue", "search"]);
 const ds: any = reactive({ options: [] });
 const search = ref("");
 const show = ref(false);
@@ -141,6 +142,7 @@ const selValue = computed(() => {
 });
 
 const filteredOptions = computed(() => {
+	emits("search", search.value);
 	if (!search.value) return ds.options;
 	return ds.options.filter((x: any) => x && x.text.toLowerCase().includes(search.value.toLowerCase()));
 });
